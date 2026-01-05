@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>🌱 Crop Recommendation</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        body {
+            background: #0b1220;
+            font-family: Arial, sans-serif;
+            color: #ffffff;
+        }
+        .container {
+            width: 70%;
+            margin: auto;
+            margin-top: 40px;
+        }
+        h1 {
+            text-align: center;
+            color: #4fc3f7;
+        }
+        input {
+            width: 100%;
+            padding: 14px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border: none;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #29b6f6;
+            color: #000;
+            font-size: 18px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0288d1;
+            color: #fff;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #111827;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        nav {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        nav a {
+            color: #4fc3f7;
+            margin: 0 15px;
+            text-decoration: none;
+            font-size: 18px;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- NAVIGATION -->
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="fertilizer.html">Fertilizer</a>
+        <a href="chatbot.html">Chatbot</a>
+    </nav>
+
+    <h1>🌱 Crop Recommendation</h1>
+
+    <!-- INPUTS (IDs MUST MATCH crop.js) -->
+    <input type="text" id="district" placeholder="District (e.g., Coimbatore)">
+    <input type="number" id="nitrogen" placeholder="Nitrogen (N)">
+    <input type="number" id="phosphorus" placeholder="Phosphorus (P)">
+    <input type="number" id="potassium" placeholder="Potassium (K)">
+    <input type="number" step="0.1" id="ph" placeholder="Soil pH">
+
+    <!-- BUTTON -->
+    <button onclick="recommendCrop()">Recommend Crop</button>
+
+    <!-- RESULT -->
+    <div id="result"></div>
+
+</div>
+
+<!-- JS (MUST BE AT END) -->
+<script src="js/crop.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,12 @@
+# src/api.py
+from fastapi import FastAPI
+from services.recommender import recommend
+
+app = FastAPI(title="AgriMind API")
+
+@app.post("/v1/rotation")
+def rotation(payload: dict):
+    # payload example: {"lat":11.02,"lon":77.01,"soil":{"N":90,"P":45,"K":40,"ph":6.5,"moisture":30},
+    #                   "region":{"state":"Tamil Nadu","district":"Coimbatore","market":"Singanallur","soil_type":"Loamy"}}
+    res = recommend(payload["lat"], payload["lon"], payload["soil"], payload["region"], top_k=5)
+    return res

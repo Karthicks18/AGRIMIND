@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>🧪 Fertilizer Recommendation</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body style="background:#0b1220;color:white;font-family:Arial">
+
+<div style="width:70%;margin:auto;margin-top:40px">
+
+    <nav style="text-align:center;margin-bottom:20px">
+        <a href="index.html">Home</a>
+        <a href="crop.html">Crop</a>
+        <a href="chatbot.html">Chatbot</a>
+    </nav>
+
+    <h1>🧪 Fertilizer Recommendation</h1>
+
+    <input id="temperature" placeholder="Temperature (°C)">
+    <input id="humidity" placeholder="Humidity (%)">
+    <input id="moisture" placeholder="Soil Moisture (%)">
+    <input id="soil_type" placeholder="Soil Type (Loamy, Red...)">
+    <input id="crop_type" placeholder="Crop Name">
+    <input id="nitrogen" placeholder="Nitrogen (N)">
+    <input id="potassium" placeholder="Potassium (K)">
+    <input id="phosphorus" placeholder="Phosphorus (P)">
+
+    <button onclick="recommendFertilizer()">Recommend Fertilizer</button>
+
+    <div id="fertilizer-result" style="margin-top:20px"></div>
+</div>
+
+<script src="js/fertilizer.js"></script>
+</body>
+</html>

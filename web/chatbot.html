@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>💬 Agriculture Chatbot</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        body {
+            background:#0b1220;
+            color:white;
+            font-family:Arial;
+        }
+        .container {
+            width:70%;
+            margin:auto;
+            margin-top:40px;
+        }
+        input {
+            width:100%;
+            padding:14px;
+            font-size:16px;
+            border-radius:6px;
+            border:none;
+        }
+        button {
+            margin-top:15px;
+            width:100%;
+            padding:14px;
+            background:#29b6f6;
+            border:none;
+            font-size:18px;
+            cursor:pointer;
+        }
+        #chat-response {
+            margin-top:20px;
+            padding:15px;
+            background:#111827;
+            border-radius:6px;
+        }
+        nav {
+            text-align:center;
+            margin-bottom:20px;
+        }
+        nav a {
+            color:#4fc3f7;
+            margin:0 15px;
+            text-decoration:none;
+            font-size:18px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="crop.html">Crop</a>
+        <a href="fertilizer.html">Fertilizer</a>
+    </nav>
+
+    <h1>💬 Agriculture Chatbot</h1>
+
+    <!-- THIS ID WAS MISSING -->
+    <input id="chat-input" placeholder="Ask about crops, soil, pests, seasons...">
+
+    <button onclick="askChatbot()">Ask AgriMind</button>
+
+    <div id="chat-response"></div>
+</div>
+
+<script src="js/chatbot.js"></script>
+</body>
+</html>

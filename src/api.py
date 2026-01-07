@@ -4,7 +4,7 @@
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
+
 from pydantic import BaseModel
 
 # -------- EXISTING LOGIC (UNCHANGED) --------
@@ -29,7 +29,7 @@ app.add_middleware(
 # ===========================================
 # STATIC WEB FILES (optional)
 # ===========================================
-app.mount("/web", StaticFiles(directory="web", html=True), name="web")
+
 
 # ===========================================
 # ROOT

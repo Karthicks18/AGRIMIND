@@ -1,5 +1,5 @@
 # ===========================================
-# AgriMind Backend API (FINAL – STABLE)
+# AgriMind Backend API (FINAL – CORS SAFE)
 # ===========================================
 
 from fastapi import FastAPI
@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-# -------- IMPORT YOUR EXISTING LOGIC --------
+# -------- EXISTING LOGIC (UNCHANGED) --------
 from src.crop_model import predict_crop
 from src.fertilizer_model import recommend_fertilizer
 from src.chatbot_general.chatbot import agriculture_chat
@@ -15,38 +15,31 @@ from src.chatbot_general.chatbot import agriculture_chat
 # ===========================================
 # APP INIT
 # ===========================================
-app = FastAPI(
-    title="AgriMind API",
-    version="3.2",
-    description="AI-powered Crop, Fertilizer & Agriculture Chatbot System"
-)
+app = FastAPI(title="AgriMind API", version="3.3")
 
-# ===========================================
-# ✅ CORS CONFIG (CRITICAL FIX)
-# ===========================================
+# ✅ CORRECT CORS FOR file://, localhost, Render
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],          # allows file://, GitHub Pages, localhost
-    allow_credentials=True,
-    allow_methods=["*"],          # GET, POST, OPTIONS
+    allow_origins=["*"],          # allow all origins
+    allow_credentials=False,      # 🔥 MUST be False
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 
 # ===========================================
-# STATIC WEB FILES (OPTIONAL)
+# STATIC WEB FILES (optional)
 # ===========================================
-# This allows: https://backend-url/web/crop.html
 app.mount("/web", StaticFiles(directory="web", html=True), name="web")
 
 # ===========================================
-# ROOT HEALTH CHECK
+# ROOT
 # ===========================================
 @app.get("/")
 def root():
     return {"status": "AgriMind backend running"}
 
 # ===========================================
-# 🌱 CROP RECOMMENDATION API
+# 🌱 CROP RECOMMENDATION
 # ===========================================
 @app.get("/recommend_crop")
 def recommend_crop_api(
@@ -57,12 +50,11 @@ def recommend_crop_api(
     ph: float
 ):
     try:
-        # Default weather values (as per your existing logic)
         temperature = 25
         humidity = 70
         rainfall = 200
 
-        message, local_crops, weather, _ = predict_crop(
+        msg, local_crops, weather, _ = predict_crop(
             N=N,
             P=P,
             K=K,
@@ -76,20 +68,17 @@ def recommend_crop_api(
 
         return {
             "success": True,
-            "message": message,
+            "message": msg,
             "district": district,
             "local_crops": local_crops,
             "weather": weather
         }
 
     except Exception as e:
-        return {
-            "success": False,
-            "error": str(e)
-        }
+        return {"success": False, "error": str(e)}
 
 # ===========================================
-# 🧪 FERTILIZER RECOMMENDATION API
+# 🧪 FERTILIZER RECOMMENDATION
 # ===========================================
 @app.get("/recommend_fertilizer")
 def recommend_fertilizer_api(
@@ -103,7 +92,7 @@ def recommend_fertilizer_api(
     phosphorus: int
 ):
     try:
-        fertilizer = recommend_fertilizer(
+        fert = recommend_fertilizer(
             temperature,
             humidity,
             moisture,
@@ -114,19 +103,13 @@ def recommend_fertilizer_api(
             phosphorus
         )
 
-        return {
-            "success": True,
-            "fertilizer": fertilizer
-        }
+        return {"success": True, "fertilizer": fert}
 
     except Exception as e:
-        return {
-            "success": False,
-            "error": str(e)
-        }
+        return {"success": False, "error": str(e)}
 
 # ===========================================
-# 💬 AGRICULTURE CHATBOT API
+# 💬 CHATBOT
 # ===========================================
 class ChatRequest(BaseModel):
     query: str
@@ -135,13 +118,6 @@ class ChatRequest(BaseModel):
 def chat_api(request: ChatRequest):
     try:
         reply = agriculture_chat(request.query)
-        return {
-            "success": True,
-            "response": reply
-        }
-
+        return {"success": True, "response": reply}
     except Exception as e:
-        return {
-            "success": False,
-            "response": f"Chatbot error: {e}"
-        }
+        return {"success": False, "response": str(e)}

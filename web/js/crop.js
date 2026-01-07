@@ -16,7 +16,7 @@ window.recommendCrop = async function () {
         return;
     }
 
-    const url = `http://127.0.0.1:8000/recommend_crop` +
+    const url = `https://agrimind-oxrb.onrender.com` +
                 `?district=${district}&N=${N}&P=${P}&K=${K}&ph=${ph}`;
 
     try {

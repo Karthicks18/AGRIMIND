@@ -12,7 +12,7 @@ async function recommendFertilizer() {
 
     const resultBox = document.getElementById("fertilizer-result");
 
-    const url = `http://127.0.0.1:8000/recommend_fertilizer?temperature=${temperature}&humidity=${humidity}&moisture=${moisture}&soil_type=${soil_type}&crop_type=${crop_type}&nitrogen=${nitrogen}&potassium=${potassium}&phosphorus=${phosphorus}`;
+    const url = `https://agrimind-oxrb.onrender.com/recommend_fertilizer?temperature=${temperature}&humidity=${humidity}&moisture=${moisture}&soil_type=${soil_type}&crop_type=${crop_type}&nitrogen=${nitrogen}&potassium=${potassium}&phosphorus=${phosphorus}`;
 
     try {
         const res = await fetch(url);

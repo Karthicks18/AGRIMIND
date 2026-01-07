@@ -1,7 +1,7 @@
 # ===========================================
 # AgriMind Backend API (FINAL – STABLE)
 # ===========================================
-
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
@@ -15,6 +15,13 @@ from src.chatbot_general.chatbot import agriculture_chat
 # APP INIT
 # ===========================================
 app = FastAPI(title="AgriMind API", version="3.2")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # allow all (safe for demo)
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # ===========================================
 # STATIC WEB FILES

@@ -1,8 +1,9 @@
 # ===========================================
 # AgriMind Backend API (FINAL – STABLE)
 # ===========================================
-from fastapi.middleware.cors import CORSMiddleware
+
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
@@ -14,22 +15,31 @@ from src.chatbot_general.chatbot import agriculture_chat
 # ===========================================
 # APP INIT
 # ===========================================
-app = FastAPI(title="AgriMind API", version="3.2")
+app = FastAPI(
+    title="AgriMind API",
+    version="3.2",
+    description="AI-powered Crop, Fertilizer & Agriculture Chatbot System"
+)
+
+# ===========================================
+# ✅ CORS CONFIG (CRITICAL FIX)
+# ===========================================
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # allow all (safe for demo)
+    allow_origins=["*"],          # allows file://, GitHub Pages, localhost
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["*"],          # GET, POST, OPTIONS
     allow_headers=["*"],
 )
 
 # ===========================================
-# STATIC WEB FILES
+# STATIC WEB FILES (OPTIONAL)
 # ===========================================
+# This allows: https://backend-url/web/crop.html
 app.mount("/web", StaticFiles(directory="web", html=True), name="web")
 
 # ===========================================
-# ROOT
+# ROOT HEALTH CHECK
 # ===========================================
 @app.get("/")
 def root():
@@ -47,12 +57,12 @@ def recommend_crop_api(
     ph: float
 ):
     try:
-        # default weather (same as before)
+        # Default weather values (as per your existing logic)
         temperature = 25
         humidity = 70
         rainfall = 200
 
-        msg, local_crops, weather, _ = predict_crop(
+        message, local_crops, weather, _ = predict_crop(
             N=N,
             P=P,
             K=K,
@@ -66,7 +76,7 @@ def recommend_crop_api(
 
         return {
             "success": True,
-            "message": msg,
+            "message": message,
             "district": district,
             "local_crops": local_crops,
             "weather": weather
@@ -93,7 +103,7 @@ def recommend_fertilizer_api(
     phosphorus: int
 ):
     try:
-        fert = recommend_fertilizer(
+        fertilizer = recommend_fertilizer(
             temperature,
             humidity,
             moisture,
@@ -106,7 +116,7 @@ def recommend_fertilizer_api(
 
         return {
             "success": True,
-            "fertilizer": fert
+            "fertilizer": fertilizer
         }
 
     except Exception as e:
@@ -129,6 +139,7 @@ def chat_api(request: ChatRequest):
             "success": True,
             "response": reply
         }
+
     except Exception as e:
         return {
             "success": False,

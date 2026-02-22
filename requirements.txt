@@ -8,3 +8,4 @@ requests
 scikit-learn
 openai
 httpx
+shap

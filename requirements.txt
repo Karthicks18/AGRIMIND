@@ -9,3 +9,5 @@ scikit-learn
 openai
 httpx
 shap
+matplotlib
+seaborn

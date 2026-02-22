@@ -7,3 +7,4 @@ pandas
 requests
 scikit-learn
 openai
+httpx

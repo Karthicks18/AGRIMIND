@@ -26,21 +26,54 @@ def recommend_fertilizer(temperature, humidity, moisture, soil_type, crop_type, 
         label_encoders = joblib.load(os.path.join(model_dir, "fertilizer_label_encoders.pkl"))
         target_le = joblib.load(os.path.join(model_dir, "fertilizer_target_encoder.pkl"))
         
-        # Encode the text inputs
+        # EXTRACT VALID CLASSES
+        valid_soils = label_encoders["Soil Type"].classes_
+        valid_crops = label_encoders["Crop Type"].classes_
+
+        # 🛑 SAFETY CHECK: Ensure the inputs exist in the training data
+        # We use .title() as a fallback to try and match capitalization just in case
+        if crop_type not in valid_crops:
+            if crop_type.title() in valid_crops:
+                crop_type = crop_type.title()
+            elif crop_type.lower() in valid_crops:
+                crop_type = crop_type.lower()
+            else:
+                return f"Crop '{crop_type}' is not in our database. Try: {', '.join(valid_crops)}"
+
+        if soil_type not in valid_soils:
+            if soil_type.title() in valid_soils:
+                soil_type = soil_type.title()
+            elif soil_type.lower() in valid_soils:
+                soil_type = soil_type.lower()
+            else:
+                return f"Soil '{soil_type}' is not in our database. Try: {', '.join(valid_soils)}"
+
+        # Encode the text inputs safely
         soil_encoded = label_encoders["Soil Type"].transform([soil_type])[0]
         crop_encoded = label_encoders["Crop Type"].transform([crop_type])[0]
         
-        # Format the data exactly how the Random Forest expects it
-        input_data = pd.DataFrame([[
-            soil_encoded, crop_encoded, temperature, humidity, moisture, nitrogen, potassium, phosphorus
-        ]], columns=["Soil Type", "Crop Type", "Temparature", "Humidity", "Moisture", "Nitrogen", "Potassium", "Phosphorous"])
+        # 1. Put all features into a dictionary
+        input_dict = {
+            "Temparature": [temperature], 
+            "Humidity": [humidity], 
+            "Moisture": [moisture], 
+            "Soil Type": [soil_encoded], 
+            "Crop Type": [crop_encoded], 
+            "Nitrogen": [nitrogen], 
+            "Potassium": [potassium], 
+            "Phosphorous": [phosphorus]
+        }
+        input_data = pd.DataFrame(input_dict)
+        
+        # 2. MAGIC LINE: Force the dataframe to match the EXACT order the .pkl model remembers!
+        input_data = input_data[model.feature_names_in_]
         
         # Make prediction
         prediction = model.predict(input_data)
         return target_le.inverse_transform(prediction)[0]
         
     except Exception as e:
-        return f"Model Error: {str(e)}"
+        return f"System Error: {str(e)}"
 
 # ========================================================
 # 2) TRAINING SCRIPT (Will ONLY run if executed directly)

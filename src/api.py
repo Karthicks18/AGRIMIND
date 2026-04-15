@@ -1,5 +1,6 @@
 import os
 import httpx
+import requests 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -16,8 +17,8 @@ app = FastAPI(title="AgriMind API", version="3.3")
 # ✅ CORRECT CORS FOR file://, localhost, Render
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],          # allow all origins
-    allow_credentials=False,      # 🔥 MUST be False
+    allow_origins=["*"],          
+    allow_credentials=False,      
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -30,7 +31,7 @@ def root():
     return {"status": "AgriMind backend running"}
 
 # ===========================================
-# 🌱 CROP RECOMMENDATION (UNCHANGED)
+# 🌱 CROP RECOMMENDATION
 # ===========================================
 @app.get("/recommend_crop")
 def recommend_crop_api(
@@ -54,12 +55,11 @@ def recommend_crop_api(
             "local_crops": local_crops,
             "weather": weather
         }
-
     except Exception as e:
         return {"success": False, "error": str(e)}
 
 # ===========================================
-# 🧪 FERTILIZER RECOMMENDATION (UNCHANGED)
+# 🧪 FERTILIZER RECOMMENDATION
 # ===========================================
 @app.get("/recommend_fertilizer")
 def recommend_fertilizer_api(
@@ -74,16 +74,14 @@ def recommend_fertilizer_api(
             potassium, phosphorus
         )
         return {"success": True, "fertilizer": fert}
-
     except Exception as e:
         return {"success": False, "error": str(e)}
 
 # ===========================================
-# 💬 CHATBOT (EXACT MATCH TO APP.PY LOGIC)
+# 💬 CHATBOT 
 # ===========================================
-import requests # Make sure this is imported at the top of your file too
-
-GROQ_API_KEY = "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"
+# ✅ THE FIX: Look for the variable name, not the key itself.
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 class ChatRequest(BaseModel):
     query: str
@@ -113,7 +111,6 @@ def chat_api(request: ChatRequest):
     }
     
     try:
-        # EXACTLY like your app.py - simple, synchronous requests
         response = requests.post(url, headers=headers, json=payload)
         response_data = response.json()
         
